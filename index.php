@@ -1,3 +1,26 @@
+
+
+<?php
+
+$products = [
+    "CPU",
+    "Motherboard",
+    "Catnip",
+    "16GB 4x4 DDR4 RAM",
+    "3 TB Hard Drive"
+];
+
+$coupons = [
+    "New Customer" => 15,
+    "Student" => 20,
+    "Tj" => 75
+]
+
+?>
+
+
+
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -22,13 +45,28 @@
                         <div class="card-body" id="cBody">
                             <form action="discount.php" method="post">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="description" placeholder="Description"></br>
+                                    <!-- <input type="text" class="form-control" name="description" placeholder="Description"></br> -->
+                                    <select class="form-control" name="description">
+                                        <?php foreach($products as $product): ?>
+                                            <option value="<?= $product ?>"><?= $product ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                     <input type="text" class="form-control" name="list_price" placeholder="List Price"><br>
                                     <div class="input-group">
+
+                                    <select class="form-control" name="discount_percent">
+                                        <?php foreach($coupons as $coupon => $discountAmount): ?>
+                                            <option value="<?= $discountAmount ?>"><?= "$coupon: $discountAmount%" ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+
+                                    <!--
                                         <input type="text" class="form-control" name="discount_percent" placeholder="Discount Amount">
+                                    
                                         <div class="input-group-append">
                                             <span class="input-group-text">%</span><br>
-                                        </div>
+                                        </div> 
+                                    -->
                                     </div>
                                     <div id="button">
                                         <input type="submit" class="btn btn-dark" value="Submit"><br>
