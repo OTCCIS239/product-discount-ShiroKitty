@@ -1,36 +1,24 @@
 
 <?php
 
-$dsn = "mysql:host=localhost;dbname=discounter";
-$username = 'root';
-$password = null;
-$conn = new PDO($dsn, $username, $password);
+require_once('./db.php');
 
-$query = "SELECT * FROM products WHERE in_stock > 0";
-
-$statement = $conn-> prepare($query);
-//binds variables
-$statement -> execute();
-
-$products = $statement->fetchAll();
-$statement->closeCursor();
+// $query = "SELECT * FROM products WHERE in_stock > 0";
+// $statement = $conn-> prepare($query);
+// $statement -> execute();
+// $products = $statement->fetchAll();
+// $statement->closeCursor();
 
 // var_dump($products);
-// die();
 
-// $products = [
-//     "CPU" => 299.99,
-//     "Motherboard" => 299.99,
-//     "Catnip" => 4.99,
-//     "16GB 4x4 DDR4 RAM" => 99.99,
-//     "3 TB Hard Drive" => 85.99,
-// ];
+// $query = "SELECT * FROM coupons WHERE deleted_at IS NULL";
+// $statement = $conn->prepare($query);
+// $statement->execute();
+// $coupons = $statement->fetchAll();
+// $statement->closeCursor();
 
-$coupons = [
-    "New Customer" => 15,
-    "Student" => 20,
-    "Tj" => 75
-]
+$products = getMany("SELECT * FROM products WHERE in_stock > 0", [], $conn);
+$coupons = getMany("SELECT * FROM coupons WHERE deleted_at IS NULL", [], $conn);
 
 ?>
 
@@ -52,11 +40,11 @@ $coupons = [
                 <div class="col-sm"></div>
                 <div class="col-sm-6">
                     <div class="card">
-                        <div class="card-header" id="cHead">
-                            Discount Calculator
-                        </div>        
-                        <div class="card-body" id="cBody">
-                            <form action="discount.php" method="post">
+                        <div class="card-header" id="cHead">Discount Calculator</div>        
+                        <div class="card-body">
+                           
+                            <!-- Products -->
+                            <form action="discount.php" method="post"> <!-- Possible cause of error -->
                                 <div class="form-group">
                                     <label for="product_id">Product</label>
                                     <select class="form-control" name="product_id" id="product_id">
@@ -64,29 +52,24 @@ $coupons = [
                                             <option value="<?= $product['id'] ?>"><?= $product['name'] ?>: $<?= $product['price'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <label for="coupon_id">Discount</label>
+                                </div>
+                            
+                                <!-- Discounts -->
+                                <div class="form-group">
+                                    <label for="coupon_id">Coupon</label>
                                     <div class="input-group">
                                         <select class="form-control" name="coupon_id" id="coupon_id">
-                                            <?php foreach($coupons as $coupon => $discountAmount): ?>
-                                                <option value="<?= $coupon['id'] ?>"><?= "$coupon: $discountAmount%" ?></option>
+                                            <?php foreach($coupons as $coupon): ?>
+                                                <option value="<?= $coupon['id'] ?>"><?= $coupon['code'] ?>: <?= $coupon['discount_percent'] ?>%</option>
                                             <?php endforeach; ?>
                                         </select>
-
-                                        <!--
-                                            <input type="text" class="form-control" name="discount_percent" placeholder="Discount Amount">
-                                        
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">%</span><br>
-                                            </div> 
-                                        -->
                                     </div>
-                                    <div id="button">
-                                        <input type="submit" class="btn btn-dark" value="Submit"><br>
-                                    </div>  
                                 </div>
-
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-dark" value="Submit">
+                                </div>
+                            </form>
                         </div>
-                          
                     </div>
                 </div>
                 <div class="col-sm"></div>
