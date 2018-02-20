@@ -1,13 +1,30 @@
 
 <?php
 
-$products = [
-    "CPU",
-    "Motherboard",
-    "Catnip",
-    "16GB 4x4 DDR4 RAM",
-    "3 TB Hard Drive"
-];
+$dsn = "mysql:host=localhost;dbname=discounter";
+$username = 'root';
+$password = null;
+$conn = new PDO($dsn, $username, $password);
+
+$query = "SELECT * FROM products WHERE in_stock > 0";
+
+$statement = $conn-> prepare($query);
+//binds variables
+$statement -> execute();
+
+$products = $statement->fetchAll();
+$statement->closeCursor();
+
+// var_dump($products);
+// die();
+
+// $products = [
+//     "CPU" => 299.99,
+//     "Motherboard" => 299.99,
+//     "Catnip" => 4.99,
+//     "16GB 4x4 DDR4 RAM" => 99.99,
+//     "3 TB Hard Drive" => 85.99,
+// ];
 
 $coupons = [
     "New Customer" => 15,
@@ -44,28 +61,28 @@ $coupons = [
                         <div class="card-body" id="cBody">
                             <form action="discount.php" method="post">
                                 <div class="form-group">
-                                    <!-- <input type="text" class="form-control" name="description" placeholder="Description"></br> -->
-                                    <select class="form-control" name="description">
+                                    <label for="price">Product</label>
+                                    <select class="form-control" name="price" id="price">
                                         <?php foreach($products as $product): ?>
-                                            <option value="<?= $product ?>"><?= $product ?></option>
+                                            <option value="<?= $product['price'] ?>"><?= $product['name'] ?>: $<?= $product['price'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <input type="text" class="form-control" name="list_price" placeholder="List Price"><br>
+                                    <!-- <input type="text" class="form-control" name="list_price" placeholder="List Price"><br> -->
+                                    <label for="discount_percent">Discount</label>
                                     <div class="input-group">
+                                        <select class="form-control" name="discount_percent">
+                                            <?php foreach($coupons as $coupon => $discountAmount): ?>
+                                                <option value="<?= $discountAmount ?>"><?= "$coupon: $discountAmount%" ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
 
-                                    <select class="form-control" name="discount_percent">
-                                        <?php foreach($coupons as $coupon => $discountAmount): ?>
-                                            <option value="<?= $discountAmount ?>"><?= "$coupon: $discountAmount%" ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-
-                                    <!--
-                                        <input type="text" class="form-control" name="discount_percent" placeholder="Discount Amount">
-                                    
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">%</span><br>
-                                        </div> 
-                                    -->
+                                        <!--
+                                            <input type="text" class="form-control" name="discount_percent" placeholder="Discount Amount">
+                                        
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span><br>
+                                            </div> 
+                                        -->
                                     </div>
                                     <div id="button">
                                         <input type="submit" class="btn btn-dark" value="Submit"><br>
