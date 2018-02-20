@@ -34,9 +34,6 @@ $coupons = [
 
 ?>
 
-
-
-
 <!doctype html>
 <html lang="en">
     <head>
@@ -61,18 +58,17 @@ $coupons = [
                         <div class="card-body" id="cBody">
                             <form action="discount.php" method="post">
                                 <div class="form-group">
-                                    <label for="price">Product</label>
-                                    <select class="form-control" name="price" id="price">
+                                    <label for="product_id">Product</label>
+                                    <select class="form-control" name="product_id" id="product_id">
                                         <?php foreach($products as $product): ?>
-                                            <option value="<?= $product['price'] ?>"><?= $product['name'] ?>: $<?= $product['price'] ?></option>
+                                            <option value="<?= $product['id'] ?>"><?= $product['name'] ?>: $<?= $product['price'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <!-- <input type="text" class="form-control" name="list_price" placeholder="List Price"><br> -->
-                                    <label for="discount_percent">Discount</label>
+                                    <label for="coupon_id">Discount</label>
                                     <div class="input-group">
-                                        <select class="form-control" name="discount_percent">
+                                        <select class="form-control" name="coupon_id" id="coupon_id">
                                             <?php foreach($coupons as $coupon => $discountAmount): ?>
-                                                <option value="<?= $discountAmount ?>"><?= "$coupon: $discountAmount%" ?></option>
+                                                <option value="<?= $coupon['id'] ?>"><?= "$coupon: $discountAmount%" ?></option>
                                             <?php endforeach; ?>
                                         </select>
 

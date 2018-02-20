@@ -1,6 +1,16 @@
 <?php
-    $price = filter_input(INPUT_POST, "price");
-    $discount = filter_input(INPUT_POST, "discount_percent");
+    // $price = filter_input(INPUT_POST, "price");
+    // $discount = filter_input(INPUT_POST, "discount_percent");
+    $dsn = "mysql:host=localhost;dbname=discounter";
+    $username = 'root';
+    $password = null;
+    $conn = new PDO($dsn, $username, $password);
+    
+    $productId = $_GET['product_id'];
+    $couponId = $_GET['coupon_id'];
+
+    $price = $_GET['price'];
+    $discount = $_GET['discount'];
 
     $discountAmt = $price * ($discount / 100);
     $discountPrice = $price - $discountAmt;
